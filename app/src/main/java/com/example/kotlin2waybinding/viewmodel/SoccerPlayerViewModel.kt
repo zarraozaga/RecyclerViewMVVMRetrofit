@@ -1,27 +1,26 @@
 package com.example.kotlin2waybinding.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.kotlin2waybinding.R
+import com.example.kotlin2waybinding.api.RetrofitBuilder
 import com.example.kotlin2waybinding.model.Player
+import com.example.kotlin2waybinding.repository.PlayerRepository
+import com.example.kotlin2waybinding.usecase.PlayerDetailsManipulationImpl
+import kotlinx.coroutines.launch
 
-class SoccerPlayerViewModel : ViewModel() {
-
+class SoccerPlayerViewModel() : ViewModel() {
+    private val playerRepo:PlayerRepository = PlayerRepository(RetrofitBuilder.apiService)
     val playersLive = MutableLiveData<List<Player>>()
 
     fun listPlayers() {
-        val lp: List<Player> = listOf(Player("Gerrard", 2, 99), Player("Torres", 3, 95))
-        for (i in lp) {
-            i.picture = when (i.picture % 4) {
-                1 -> R.drawable.defender
-                2 -> R.drawable.midfield
-                3 -> R.drawable.striker
-                else -> R.drawable.keeper
-            }
+        viewModelScope.launch {
+            val playerfitiml = PlayerDetailsManipulationImpl(playerRepo)
+            val lp = playerfitiml.getPlayersList()
+            playersLive.value = lp
         }
-
-        playersLive.value = lp
-
     }
 
 }
