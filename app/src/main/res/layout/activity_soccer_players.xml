@@ -6,10 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".view.SoccerPlayersActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/soccer_players_rv"
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.kotlin2waybinding.view.PlayerListFragment"
         android:layout_width="match_parent"
-        android:layout_height="417dp"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
