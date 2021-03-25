@@ -9,12 +9,14 @@
 
         <variable
             name="clickListener"
-            type="com.example.kotlin2waybinding.view.SoccerPlayersAdapter.SoccerPlayerListener" />
+            type="com.example.kotlin2waybinding.view.SoccerPlayerListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="80dp"
+        android:onClick="@{() -> clickListener.onClick(player)}"
+        >
 
         <TextView
             android:id="@+id/playerName"
