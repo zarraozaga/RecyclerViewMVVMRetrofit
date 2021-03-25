@@ -2,26 +2,52 @@ package com.example.kotlin2waybinding.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.kotlin2waybinding.R
+import androidx.lifecycle.viewModelScope
+import com.example.kotlin2waybinding.api.RetrofitBuilder
 import com.example.kotlin2waybinding.model.Player
+import com.example.kotlin2waybinding.repository.PlayerRepository
+import com.example.kotlin2waybinding.usecase.PlayerDetailsManipulationImpl
+import kotlinx.coroutines.launch
 
-class SoccerPlayerViewModel : ViewModel() {
+class SoccerPlayerViewModel() : ViewModel() {
+    private val _playerRepo:PlayerRepository = PlayerRepository(RetrofitBuilder.mockDataAPIService, RetrofitBuilder.metaphorsumAPIService)
+    private val _navigateToPlayerDetails = MutableLiveData<Long>()
+
 
     val playersLive = MutableLiveData<List<Player>>()
+    val playerDetails = MutableLiveData<Player>()
+    val navigateToPlayerDetails get() = _navigateToPlayerDetails
+    val loading : MutableLiveData<Boolean> = MutableLiveData<Boolean>()
 
     fun listPlayers() {
-        val lp: List<Player> = listOf(Player("Gerrard", 2, 99), Player("Torres", 3, 95))
-        for (i in lp) {
-            i.picture = when (i.picture % 4) {
-                1 -> R.drawable.defender
-                2 -> R.drawable.midfield
-                3 -> R.drawable.striker
-                else -> R.drawable.keeper
-            }
+        loading.value = true
+        viewModelScope.launch {
+            val playerfitiml = PlayerDetailsManipulationImpl(_playerRepo)
+            val lp = playerfitiml.getPlayersList()
+            playersLive.value = lp
+            loading.value = false
         }
-
-        playersLive.value = lp
-
     }
+
+    fun getPlayer(id: Long) {
+        loading.value = true
+        viewModelScope.launch {
+            val playerfitiml = PlayerDetailsManipulationImpl(_playerRepo)
+            val lp = playerfitiml.getPlayer(id)
+            playerDetails.value = lp
+            loading.value = false
+        }
+    }
+
+    fun playerDetailsClicked(id: Long) {
+        _navigateToPlayerDetails.value = id
+    }
+
+    fun onPlayerDetailsNavigated() {
+        _navigateToPlayerDetails.value = null
+    }
+
+
+
 
 }

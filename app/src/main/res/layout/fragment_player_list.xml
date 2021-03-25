@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="soccerPlayerVM"
+            type="com.example.kotlin2waybinding.viewmodel.SoccerPlayerViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/player_list_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.PlayerListFragment">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/soccer_players_rv_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
+</layout>
